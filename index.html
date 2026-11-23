@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101713">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Boss Dog">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Boss Dog Scanner</title>
+<style>
+:root{color-scheme:dark;--bg:#0b100d;--panel:#141d17;--panel2:#1b2820;--green:#a7f36b;--muted:#aab8ad;--line:#2a3a30}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1a2a20 0,#0b100d 55%);color:#f5f8f5;font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:calc(env(safe-area-inset-top) + 18px) 20px 18px;position:sticky;top:0;background:#0d1511ed;backdrop-filter:blur(15px);z-index:5;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:var(--green);color:#122016;display:grid;place-items:center;font-size:25px;font-weight:900}.brand h1{font-size:20px;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px;letter-spacing:1.5px}
+main{padding:18px 16px 100px;max-width:760px;margin:auto}.hero{padding:22px;border:1px solid #354a3b;border-radius:24px;background:linear-gradient(140deg,#1d3023,#111a14);margin-bottom:18px}.eyebrow{color:var(--green);font-size:11px;font-weight:800;letter-spacing:1.8px}.hero h2{font-size:28px;line-height:1.1;margin:10px 0}.hero p{color:var(--muted);line-height:1.5;margin:0 0 18px}
+button,.button{border:0;border-radius:14px;padding:13px 16px;font-weight:750;font-size:14px;cursor:pointer;background:var(--green);color:#142016}.secondary{background:#26372b;color:#f5f8f5;border:1px solid #3b5141}.danger{background:#462525;color:#ffdede}.actions{display:flex;gap:9px;flex-wrap:wrap}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.tab{background:#17221a;color:var(--muted);border:1px solid var(--line);padding:12px 6px}.tab.active{background:#283b2c;color:var(--green);border-color:#62834e}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:17px;margin:12px 0}.card h3{margin:0 0 12px;font-size:17px}.muted{color:var(--muted)}.small{font-size:12px;line-height:1.5;color:var(--muted)}
+label{display:block;color:#c8d5cb;font-size:13px;margin:12px 0 6px}input,select,textarea{width:100%;background:#0d1510;border:1px solid #35483a;color:#f5f8f5;border-radius:12px;padding:12px;font:inherit}textarea{min-height:80px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dog{display:flex;gap:13px;align-items:center}.thumb{width:76px;height:76px;object-fit:cover;border-radius:15px;background:#26372b}.dog strong{display:block;font-size:17px}.dog small{color:var(--muted)}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.photo-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}
+.notice{background:#2a2719;border:1px solid #62552b;color:#f4e5a8;border-radius:14px;padding:13px;font-size:12px;line-height:1.5;margin-top:12px}
+.hidden{display:none!important}.empty{text-align:center;padding:30px 12px;color:var(--muted)}.pill{display:inline-block;background:#293a2b;color:var(--green);padding:5px 9px;border-radius:99px;font-size:11px;font-weight:800}
+nav{position:fixed;bottom:0;left:0;right:0;padding:10px 16px calc(env(safe-area-inset-bottom) + 10px);background:#0d1511f2;border-top:1px solid var(--line);display:flex;justify-content:space-around;z-index:6}nav button{background:transparent;color:var(--muted);padding:8px 10px}nav button.active{color:var(--green)}
+dialog{background:#121b15;color:white;border:1px solid var(--line);border-radius:22px;width:min(92%,520px);max-height:85vh;overflow:auto}dialog::backdrop{background:#000b}dialog form{padding:10px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">🐾</div><div><h1>Boss Dog Scanner</h1><p>IDENTITÉ • COULEUR • GÉNÉTIQUE</p></div></div></header>
+<main>
+<section id="home">
+<div class="hero"><div class="eyebrow">TON ÉLEVAGE, TON DOSSIER</div><h2>Chaque chien a son histoire.</h2><p>Centralise les photos, les fiches et les informations génétiques de tes chiens au même endroit.</p><div class="actions"><button onclick="openNewDog()">＋ Ajouter un chien</button><button class="secondary" onclick="showTab('scanner')">Ouvrir le scanner</button></div></div>
+<div class="grid">
+<div class="card"><div class="eyebrow">MES CHIENS</div><div id="dogCount" style="font-size:30px;font-weight:850;margin-top:8px">0</div><div class="small">Fiches enregistrées sur cet appareil</div></div>
+<div class="card"><div class="eyebrow">PHOTOS</div><div id="photoCount" style="font-size:30px;font-weight:850;margin-top:8px">0</div><div class="small">Photos sauvegardées</div></div>
+</div>
+<h3>Mes chiens</h3><div id="homeDogs"></div>
+</section>
+
+<section id="scanner" class="hidden">
+<div class="card"><div class="eyebrow">ANALYSE VISUELLE</div><h2>Scanner un chien</h2><p class="muted">Ajoute une photo nette, idéalement de face et de profil.</p>
+<label>Photo du chien</label><input id="scanPhoto" type="file" accept="image/*" capture="environment">
+<div id="scanPreview" class="hidden" style="margin-top:12px"><img id="scanImage" style="width:100%;max-height:300px;object-fit:contain;border-radius:14px"></div>
+<div class="notice">Cette version ne contient pas encore de modèle d'intelligence artificielle. Les champs ci-dessous servent à consigner une première observation humaine; aucun pourcentage automatique n'est inventé.</div>
+<label>Race observée / probable</label><input id="scanBreed" placeholder="Ex. Bouledogue français">
+<label>Couleur visible</label><input id="scanColor" placeholder="Ex. beige-gris, bleu, fauve…">
+<label>Type de poil observé</label><select id="scanCoat"><option>À déterminer</option><option>Poil court</option><option>Possiblement fluffy</option><option>Poil long / fluffy</option></select>
+<label>Niveau de confiance de l'observation</label><select id="scanConfidence"><option>Faible</option><option selected>Moyen</option><option>Élevé</option></select>
+<button style="width:100%;margin-top:14px" onclick="saveScan()">Enregistrer l'observation dans une fiche</button>
+</div>
+</section>
+
+<section id="dogs" class="hidden">
+<div class="actions" style="justify-content:space-between;align-items:center"><h2>Mes chiens</h2><button onclick="openNewDog()">＋ Ajouter</button></div>
+<div id="allDogs"></div>
+</section>
+</main>
+<nav><button id="nav-home" class="active" onclick="showTab('home')">⌂<br>Accueil</button><button id="nav-scanner" onclick="showTab('scanner')">◎<br>Scanner</button><button id="nav-dogs" onclick="showTab('dogs')">🐾<br>Mes chiens</button></nav>
+
+<dialog id="dogDialog"><form method="dialog" onsubmit="return false"><h2 id="dialogTitle">Ajouter un chien</h2><input type="hidden" id="dogId">
+<label>Nom</label><input id="dogName" required placeholder="Nom du chien">
+<div class="grid"><div><label>Race</label><input id="dogBreed" value="Bouledogue français"></div><div><label>Sexe</label><select id="dogSex"><option>Femelle</option><option>Mâle</option><option>Inconnu</option></select></div></div>
+<label>Date de naissance</label><input id="dogBirth" type="date">
+<label>Couleur visible</label><input id="dogColor" placeholder="À déterminer">
+<label>Type de poil</label><select id="dogCoat"><option>À déterminer</option><option>Poil court</option><option>Possiblement fluffy</option><option>Poil long / fluffy</option></select>
+<label>Notes / parents</label><textarea id="dogNotes" placeholder="Père, mère, informations utiles…"></textarea>
+<div class="actions" style="margin-top:16px"><button onclick="saveDog()">Enregistrer</button><button class="secondary" onclick="document.getElementById('dogDialog').close()">Annuler</button></div></form></dialog>
+
+<dialog id="detailDialog"><form method="dialog"><div id="detailContent"></div><button class="secondary" style="margin-top:16px" onclick="document.getElementById('detailDialog').close()">Fermer</button></form></dialog>
+<input id="dogPhotoInput" class="hidden" type="file" accept="image/*" multiple>
+
+<script>
+const DB='bossDogScanner_v1';
+let dogs=JSON.parse(localStorage.getItem(DB)||'[]');
+let pendingScan=null;
+function persist(){localStorage.setItem(DB,JSON.stringify(dogs));render()}
+function showTab(tab){['home','scanner','dogs'].forEach(t=>document.getElementById(t).classList.toggle('hidden',t!==tab));['home','scanner','dogs'].forEach(t=>document.getElementById('nav-'+t).classList.toggle('active',t===tab));}
+function counts(){document.getElementById('dogCount').textContent=dogs.length;document.getElementById('photoCount').textContent=dogs.reduce((n,d)=>n+(d.photos||[]).length,0)}
+function card(d){let pic=d.photos?.[0];return `<div class="card dog" onclick="openDetail('${d.id}')"><img class="thumb" src="${pic||''}" onerror="this.style.visibility='hidden'"><div style="flex:1"><strong>${esc(d.name)}</strong><small>${esc(d.breed)} • ${esc(d.color||'Couleur à déterminer')}</small><br><span class="pill">${esc(d.coat||'Poil à déterminer')}</span></div><span>›</span></div>`}
+function render(){counts();let list=dogs.map(card).join('')||'<div class="empty">Aucun chien enregistré.<br>Appuie sur « Ajouter un chien » pour commencer.</div>';document.getElementById('homeDogs').innerHTML=list;document.getElementById('allDogs').innerHTML=list}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function openNewDog(){['dogId','dogName','dogNotes','dogColor','dogBirth'].forEach(id=>document.getElementById(id).value='');document.getElementById('dogBreed').value='Bouledogue français';document.getElementById('dialogTitle').textContent='Ajouter un chien';document.getElementById('dogDialog').showModal()}
+function saveDog(){let id=document.getElementById('dogId').value||crypto.randomUUID();let d={id,name:document.getElementById('dogName').value.trim()||'Sans nom',breed:document.getElementById('dogBreed').value,sex:document.getElementById('dogSex').value,birth:document.getElementById('dogBirth').value,color:document.getElementById('dogColor').value,coat:document.getElementById('dogCoat').value,notes:document.getElementById('dogNotes').value,photos:[],dna:{merle:'Non testé',fluffy:'Non testé',isabella:'Non testé'}};let old=dogs.find(x=>x.id===id);if(old)d.photos=old.photos||[];dogs=old?dogs.map(x=>x.id===id?{...old,...d}:x):[d,...dogs];persist();document.getElementById('dogDialog').close()}
+function openDetail(id){let d=dogs.find(x=>x.id===id);if(!d)return;let photos=(d.photos||[]).map(p=>`<img src="${p}">`).join('');document.getElementById('detailContent').innerHTML=`<h2>${esc(d.name)}</h2><p class="muted">${esc(d.breed)} • ${esc(d.sex)} • ${esc(d.birth||'Date inconnue')}</p><h3>Apparence observée</h3><p>Couleur : ${esc(d.color||'À déterminer')}<br>Poil : ${esc(d.coat||'À déterminer')}</p><h3>Galerie</h3><div class="photo-grid">${photos||'<p class="muted">Aucune photo.</p>'}</div><div class="actions" style="margin-top:14px"><button onclick="addPhotos('${d.id}')">＋ Ajouter photos</button><button class="secondary" onclick="editDog('${d.id}')">Modifier fiche</button><button class="danger" onclick="deleteDog('${d.id}')">Supprimer</button></div><h3>Suivi ADN</h3><p>Merle : ${esc(d.dna?.merle||'Non testé')}<br>Fluffy / FGF5 : ${esc(d.dna?.fluffy||'Non testé')}<br>Isabella / couleur : ${esc(d.dna?.isabella||'Non testé')}</p><div class="notice">Une photo ne confirme pas un génotype. Inscris ici uniquement les résultats d'un laboratoire.</div><label>Résultat Merle</label><input id="dnaMerle" value="${esc(d.dna?.merle||'Non testé')}"><label>Résultat Fluffy / FGF5</label><input id="dnaFluffy" value="${esc(d.dna?.fluffy||'Non testé')}"><label>Résultat Isabella / couleur</label><input id="dnaIsabella" value="${esc(d.dna?.isabella||'Non testé')}"><button style="margin-top:12px" onclick="saveDNA('${d.id}')">Enregistrer résultats ADN</button>`;document.getElementById('detailDialog').showModal()}
+function addPhotos(id){document.getElementById('dogPhotoInput').dataset.id=id;document.getElementById('dogPhotoInput').click()}
+document.getElementById('dogPhotoInput').addEventListener('change',async e=>{let d=dogs.find(x=>x.id===e.target.dataset.id);if(!d)return;for(let f of e.target.files){let data=await resizeImage(f);d.photos=d.photos||[];d.photos.push(data)}persist();openDetail(d.id);e.target.value=''})
+function resizeImage(file){return new Promise(resolve=>{let img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let c=document.createElement('canvas'),scale=Math.min(1,1200/Math.max(img.width,img.height));c.width=img.width*scale;c.height=img.height*scale;c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);resolve(c.toDataURL('image/jpeg',.78))};img.src=url})}
+function saveDNA(id){let d=dogs.find(x=>x.id===id);d.dna={merle:document.getElementById('dnaMerle').value,fluffy:document.getElementById('dnaFluffy').value,isabella:document.getElementById('dnaIsabella').value};persist();openDetail(id)}
+function deleteDog(id){if(confirm('Supprimer cette fiche et ses photos?')){dogs=dogs.filter(x=>x.id!==id);persist();document.getElementById('detailDialog').close()}}
+function editDog(id){let d=dogs.find(x=>x.id===id);document.getElementById('detailDialog').close();document.getElementById('dogId').value=d.id;document.getElementById('dogName').value=d.name;document.getElementById('dogBreed').value=d.breed;document.getElementById('dogSex').value=d.sex;document.getElementById('dogBirth').value=d.birth;document.getElementById('dogColor').value=d.color;document.getElementById('dogCoat').value=d.coat;document.getElementById('dogNotes').value=d.notes;document.getElementById('dialogTitle').textContent='Modifier la fiche';document.getElementById('dogDialog').showModal()}
+document.getElementById('scanPhoto').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let url=URL.createObjectURL(f);document.getElementById('scanImage').src=url;document.getElementById('scanPreview').classList.remove('hidden');pendingScan=f})
+async function saveScan(){if(!pendingScan){alert('Ajoute une photo avant d’enregistrer.');return}let data=await resizeImage(pendingScan);let d={id:crypto.randomUUID(),name:'Chien à identifier',breed:document.getElementById('scanBreed').value||'À déterminer',sex:'Inconnu',birth:'',color:document.getElementById('scanColor').value||'À déterminer',coat:document.getElementById('scanCoat').value,notes:'Observation visuelle — confiance : '+document.getElementById('scanConfidence').value,photos:[data],dna:{merle:'Non testé',fluffy:'Non testé',isabella:'Non testé'}};dogs.unshift(d);persist();pendingScan=null;alert('Observation enregistrée dans Mes chiens.');showTab('dogs')}
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+render();
+</script>
+</body></html>
